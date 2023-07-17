@@ -8,8 +8,10 @@ public class Ship
 	private int damage;
 	private int capacity;
 	private int speed;
+	private ResourceAmount price;
 	
-	public Ship(String id, String name, int health, int damage, int capacity, int speed)
+	
+	public Ship(String id, String name, int health, int damage, int capacity, int speed, ResourceAmount price)
 	{
 		super();
 		this.id = id;
@@ -18,6 +20,7 @@ public class Ship
 		this.damage = damage;
 		this.capacity = capacity;
 		this.speed = speed;
+		this.price = price;
 	}
 
 	public String getId() 
@@ -49,6 +52,12 @@ public class Ship
 	{
 		return speed;
 	}
+	
+	public ResourceAmount getPrice()
+	{
+		return price;
+	}
+
 	
 	
 }

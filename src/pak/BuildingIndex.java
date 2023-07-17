@@ -11,8 +11,8 @@ public class BuildingIndex
 	
 	private BuildingIndex()
 	{
-		buildings.add(new Building("metalM", "Metal Mine", 1000));
-		buildings.add(new Building("crystalM", "Crystal Mine", 1000));
+		buildings.add(new Building("mine_metal", "Metal Mine", 1000));
+		buildings.add(new Building("mine_crystal", "Crystal Mine", 1000));
 	}
 	
 	public static BuildingIndex getInstance()
