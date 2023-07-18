@@ -10,8 +10,24 @@ public class ShipIndex
 	
 	private ShipIndex()
 	{
-		ships.add(new Ship("scout", "Scout", 100, 10, 10, 500, new ResourceAmount(ResourceType.CRYSTAL, 50).add(ResourceType.IRON, 10)));
-		ships.add(new Ship("fighter", "Star Fighter", 500, 50, 100, 5000, new ResourceAmount(ResourceType.CRYSTAL, 530).add(ResourceType.IRON, 100)));
+		ships.add(new Ship(
+				/* id */		"scout", 
+				/* name */		"Scout", 
+				/* health */	100, 
+				/* damage */	10, 
+				/* capacity */	10, 
+				/* speed */		500, 
+				/* price */		new ResourceAmount(ResourceType.CRYSTAL, 50).add(ResourceType.IRON, 10)));
+		
+		
+		ships.add(new Ship(
+				/* id */		"fighter", 
+				/* name */		"Star Fighter", 
+				/* health*/		500, 
+				/* damage*/		50, 
+				/* capacity */	100, 
+				/* speed */		5000, 
+				/* price */		new ResourceAmount(ResourceType.CRYSTAL, 530).add(ResourceType.IRON, 100)));
 	}
 	
 	public static ShipIndex getInstance()

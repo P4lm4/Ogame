@@ -84,26 +84,6 @@ public class ResourceAmount
 		return this;
 	}
 	
-	/*
-	public ResourceAmount checkPay(ResourceAmount other)
-	{
-		for(int i = 0; i < amount.length; i++)
-		{
-			if(this.amount[i] >= other.amount[i])
-			{
-				this.amount[i] -= other.amount[i];
-			}
-			else
-			{	
-			break;
-			}
-			
-		}
-		
-		return this;
-	}
-	*/
-	
 	public ResourceAmount add(ResourceType resource, int count)
 	{
 		amount[resource.ordinal()] += count;

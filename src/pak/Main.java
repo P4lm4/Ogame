@@ -14,7 +14,7 @@ public class Main
 		if(pareIgraca.has(brod.getPrice(), 10))
 		{
 			
-			System.out.println("Imate resursa ya kupvinu.");
+			System.out.println("Imate resursa za kupvinu.");
 			pareIgraca.remove(brod.getPrice(), 10);
 			System.out.println("Igracu je ostalo " + pareIgraca);
 			
@@ -23,6 +23,13 @@ public class Main
 		{
 			System.out.println("Nemate dovoljno resursa!");
 		}
+		
+		Fleet flota1 = new Fleet();
+		flota1.addShip(brod, 100);
+		flota1.removeShip(brod, 50);
+		flota1.removeShip(ShipIndex.getInstance().getById("fighter"), 50);
+		
+		System.out.println(flota1);
 
 	}
 
