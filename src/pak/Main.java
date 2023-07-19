@@ -7,6 +7,8 @@ public class Main
 	{	
 		Ship brod = ShipIndex.getInstance().getById("scout");
 		
+		Building zgrada = BuildingIndex.getInstance().getById("mine_metal");
+		
 		ResourceAmount pareIgraca = new ResourceAmount(ResourceType.IRON, 1000).add(ResourceType.CRYSTAL, 1000);
 		
 		System.out.println("Igrace trenutno ima " + pareIgraca);
@@ -30,6 +32,20 @@ public class Main
 		flota1.removeShip(ShipIndex.getInstance().getById("fighter"), 50);
 		
 		System.out.println(flota1);
+		
+		Planet planet1 = new Planet("Zemlja", new ResourceAmount(ResourceType.IRON, 0).add(ResourceType.CRYSTAL, 0));
+		
+		planet1.addBuilding(zgrada);
+		planet1.addBuilding(zgrada);
+		planet1.addBuilding(zgrada);
+		planet1.addBuilding(zgrada);
+		
+		for(int i = 0; i < 50; i++)
+		{
+			planet1.tick();
+		}
+		
+		System.out.println("Planeta ima: " + planet1);
 
 	}
 

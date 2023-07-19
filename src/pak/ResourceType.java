@@ -5,6 +5,6 @@ public enum ResourceType
 	
 	IRON,
 	CRYSTAL,
-	ENERGY;
+	DEUTERIUM;
 
 }

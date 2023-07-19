@@ -13,7 +13,8 @@ public class ShipIndex
 		ships.add(new Ship(
 				/* id */		"scout", 
 				/* name */		"Scout", 
-				/* health */	100, 
+				/* health */	100,
+				/* energy */	-50,
 				/* damage */	10, 
 				/* capacity */	10, 
 				/* speed */		500, 
@@ -23,7 +24,8 @@ public class ShipIndex
 		ships.add(new Ship(
 				/* id */		"fighter", 
 				/* name */		"Star Fighter", 
-				/* health*/		500, 
+				/* health*/		500,
+				/* energy */	-100,
 				/* damage*/		50, 
 				/* capacity */	100, 
 				/* speed */		5000, 

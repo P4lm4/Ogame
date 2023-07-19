@@ -11,8 +11,21 @@ public class BuildingIndex
 	
 	private BuildingIndex()
 	{
-		buildings.add(new Building("mine_metal", "Metal Mine", 1000));
-		buildings.add(new Building("mine_crystal", "Crystal Mine", 1000));
+		buildings.add(new Building(
+				/* id */				"mine_metal", 
+				/* name */				"Metal Mine", 
+				/* health */			1000,
+				/* energy */			-100,
+				/* production */		new ResourceAmount(ResourceType.IRON, 100).add(ResourceType.CRYSTAL, 0), 
+				/* productionPerLvl */	new ResourceAmount(ResourceType.IRON, 200).add(ResourceType.CRYSTAL, 0)));
+		
+		buildings.add(new Building(
+				/* id */				"mine_crystal", 
+				/* name */				"Crystal Mine", 
+				/* health */			1000,
+				/* energy */			-100,
+				/* production*/			new ResourceAmount(ResourceType.IRON, 0).add(ResourceType.CRYSTAL, 100),
+				/* productionPerLvl */	new ResourceAmount(ResourceType.IRON, 0).add(ResourceType.CRYSTAL, 250)));
 	}
 	
 	public static BuildingIndex getInstance()
