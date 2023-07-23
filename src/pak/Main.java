@@ -7,7 +7,9 @@ public class Main
 	{	
 		Ship brod = ShipIndex.getInstance().getById("scout");
 		
-		Building zgrada = BuildingIndex.getInstance().getById("mine_metal");
+		Building metalZgrada = BuildingIndex.getInstance().getById("mine_metal");
+		Building kristalZgrada = BuildingIndex.getInstance().getById("mine_crystal");
+		Building elektrana = BuildingIndex.getInstance().getById("powerplant_energy");
 		
 		ResourceAmount pareIgraca = new ResourceAmount(ResourceType.IRON, 1000).add(ResourceType.CRYSTAL, 1000);
 		
@@ -33,14 +35,22 @@ public class Main
 		
 		System.out.println(flota1);
 		
-		Planet planet1 = new Planet("Zemlja", new ResourceAmount(ResourceType.IRON, 0).add(ResourceType.CRYSTAL, 0));
+		Planet planet1 = new Planet("Zemlja", new ResourceAmount(ResourceType.IRON, 1000).add(ResourceType.CRYSTAL, 1000));
 		
-		planet1.addBuilding(zgrada);
-		planet1.addBuilding(zgrada);
-		planet1.addBuilding(zgrada);
-		planet1.addBuilding(zgrada);
+		System.out.println("Pokusavamo praviti zgradu: " + planet1.constructBuilding(elektrana));
 		
-		for(int i = 0; i < 50; i++)
+		
+		
+		for(int i = 0; i < 20; i++)
+		{
+			planet1.tick();
+		}
+		
+		System.out.println("Planeta ima: " + planet1);
+		
+		System.out.println("Pokusavamo praviti zgradu: " + planet1.constructBuilding(metalZgrada));
+		
+		for(int i = 0; i < 20; i++)
 		{
 			planet1.tick();
 		}

@@ -17,7 +17,10 @@ public class BuildingIndex
 				/* health */			1000,
 				/* energy */			-100,
 				/* production */		new ResourceAmount(ResourceType.IRON, 100).add(ResourceType.CRYSTAL, 0), 
-				/* productionPerLvl */	new ResourceAmount(ResourceType.IRON, 200).add(ResourceType.CRYSTAL, 0)));
+				/* productionPerLvl */	new ResourceAmount(ResourceType.IRON, 200).add(ResourceType.CRYSTAL, 0),
+				/* price */				new ResourceAmount(ResourceType.IRON, 100).add(ResourceType.CRYSTAL, 50),
+				/* pricePerLvl */		new ResourceAmount(ResourceType.IRON, 200).add(ResourceType.CRYSTAL, 100),
+				/* constractionTimer */	20));
 		
 		buildings.add(new Building(
 				/* id */				"mine_crystal", 
@@ -25,7 +28,21 @@ public class BuildingIndex
 				/* health */			1000,
 				/* energy */			-100,
 				/* production*/			new ResourceAmount(ResourceType.IRON, 0).add(ResourceType.CRYSTAL, 100),
-				/* productionPerLvl */	new ResourceAmount(ResourceType.IRON, 0).add(ResourceType.CRYSTAL, 250)));
+				/* productionPerLvl */	new ResourceAmount(ResourceType.IRON, 0).add(ResourceType.CRYSTAL, 250),
+				/* price */				new ResourceAmount(ResourceType.IRON, 100).add(ResourceType.CRYSTAL, 50),
+				/* pricePerLvl */		new ResourceAmount(ResourceType.IRON, 200).add(ResourceType.CRYSTAL, 100),
+				/* constractionTimer */	20));
+		
+		buildings.add(new Building(
+				/* id */				"powerplant_energy", 
+				/* name */				"Solar Power Plant", 
+				/* health */			1000,
+				/* energy */			1000,
+				/* production*/			new ResourceAmount(ResourceType.IRON, 0).add(ResourceType.CRYSTAL, 0),
+				/* productionPerLvl */	new ResourceAmount(ResourceType.IRON, 0).add(ResourceType.CRYSTAL, 0),
+				/* price */				new ResourceAmount(ResourceType.IRON, 100).add(ResourceType.CRYSTAL, 50),
+				/* pricePerLvl */		new ResourceAmount(ResourceType.IRON, 200).add(ResourceType.CRYSTAL, 100),
+				/* constractionTimer */	20));
 	}
 	
 	public static BuildingIndex getInstance()
