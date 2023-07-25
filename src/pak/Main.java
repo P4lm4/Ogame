@@ -1,5 +1,7 @@
 package pak;
 
+import java.util.ArrayList;
+
 public class Main
 {
 
@@ -35,7 +37,13 @@ public class Main
 		
 		System.out.println(flota1);
 		
-		Planet planet1 = new Planet("Zemlja", new ResourceAmount(ResourceType.IRON, 1000).add(ResourceType.CRYSTAL, 1000));
+		Universe alpha = new Universe(100, 100, 100);
+		
+		System.out.println("Imamo " + alpha.getNumberOfPlanets() + " planeta");
+		
+		System.out.println("Razmak izmedju planeta " + alpha.getPlanet(10) + " i " + alpha.getPlanet(20) + " je " + alpha.getPlanet(10).distanceTo(alpha.getPlanet(20)));
+		 
+		Planet planet1 = alpha.getPlanet(10); //new Planet(1, "Zemlja", new ResourceAmount(ResourceType.IRON, 1000).add(ResourceType.CRYSTAL, 1000),25,50);
 		
 		System.out.println("Pokusavamo praviti zgradu: " + planet1.constructBuilding(elektrana));
 		
@@ -56,6 +64,29 @@ public class Main
 		}
 		
 		System.out.println("Planeta ima: " + planet1);
+		
+		System.out.println("Pokusavamo praviti zgradu: " + planet1.constructBuilding(elektrana));
+		
+		for(int i = 0; i < 20; i++)
+		{
+			planet1.tick();
+		}
+		
+		System.out.println("Planeta ima: " + planet1);
+		
+		System.out.println("Pokusavamo praviti zgradu: " + planet1.constructBuilding(metalZgrada));
+		
+		for(int i = 0; i < 20; i++)
+		{
+			planet1.tick();
+		}
+		
+		System.out.println("Planeta ima: " + planet1);
+	
+		ArrayList<Planet> skeniranePlanete = alpha.planetScaned(planet1, 20);
+		
+		System.out.println(skeniranePlanete);
+		
 
 	}
 

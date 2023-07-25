@@ -7,19 +7,21 @@ public class Building
 	private String name;
 	private int health;
 	private int energy;
+	private int energyPerLvl;
 	private	ResourceAmount production;
 	private ResourceAmount productionPerLvl;
 	private ResourceAmount price;
 	private ResourceAmount pricePerLvl;
 	private int constractionTimer;
 	
-	public Building(String id, String name, int health, int energy, ResourceAmount production, ResourceAmount productionPerLvl, ResourceAmount price, ResourceAmount pricePerLvl, int constractionTimer)
+	public Building(String id, String name, int health, int energy, int energyPerLvl, ResourceAmount production, ResourceAmount productionPerLvl, ResourceAmount price, ResourceAmount pricePerLvl, int constractionTimer)
 	{
 		super();
 		this.id = id;
 		this.name = name;
 		this.health = health;
 		this.energy = energy;
+		this.energyPerLvl = energyPerLvl;
 		this.production = production;
 		this.productionPerLvl = productionPerLvl;
 		this.price = price;
@@ -79,11 +81,19 @@ public class Building
 		
 	}
 	
-	public void payPrice(Planet planet, int lvl)
+	public ResourceAmount getPriceForLvl(int lvl)
 	{
-		planet.getResource().remove(price);
-		planet.getResource().remove(pricePerLvl);
+		ResourceAmount targetPrice = new ResourceAmount();
+		
+		targetPrice.add(price);
+		targetPrice.add(pricePerLvl, lvl);
+		
+		return targetPrice;
 	}
 	
+	public int getEnergyPetLvl(int lvl)
+	{
+		return energy + energyPerLvl * lvl;
+	}
 
 }
