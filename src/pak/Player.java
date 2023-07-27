@@ -25,11 +25,19 @@ public class Player
 			if(p == planet)
 			{
 				System.out.println("Igrac vec posjeduje " + planet + " planetu.");;
-				break;
+				return;
 			}
 		}
 		
+		if(planet.getOwner() != null)
+		{
+			
+			planet.getOwner().listOfPlanets.remove(planet);
+	
+		}
+		
 		listOfPlanets.add(planet);
+		planet.setOwner(this);
 		
 	}
 	

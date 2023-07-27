@@ -15,8 +15,10 @@ public class Planet
 	private int resourceTimer = 0;
 	private Building conBuilding;
 	private int constructionTimer;
-	private Player ownerPlanet;
+	private Player owner;
 	
+
+
 	public Planet(int id, String name, ResourceAmount resource, int positionX, int positionY)
 	{
 		this.id = id;
@@ -189,6 +191,11 @@ public class Planet
 		return result;
 	}
 	
+	public void setOwner(Player ownerPlanet)
+	{
+		this.owner = ownerPlanet;
+	}
+	
 	public ResourceAmount getResource()
 	{
 		return resource;
@@ -214,9 +221,9 @@ public class Planet
 		return positionY;
 	}
 	
-	public Player getOwnerPlanet()
+	public Player getOwner()
 	{
-		return ownerPlanet;
+		return owner;
 	}
 	
 
