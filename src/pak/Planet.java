@@ -1,5 +1,6 @@
 package pak;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Planet
@@ -16,19 +17,68 @@ public class Planet
 	private Building conBuilding;
 	private int constructionTimer;
 	private Player owner;
+	private Universe universe;
 	
+	private HashMap<Building, Integer> planetBuildings = new HashMap<Building, Integer>();
+	private ArrayList<Flight> incomingFlights = new ArrayList<Flight>();
+	private ArrayList<Flight> outgoingFlights = new ArrayList<Flight>();
 
-
-	public Planet(int id, String name, ResourceAmount resource, int positionX, int positionY)
+	public Planet(Universe universe, int id, String name, ResourceAmount resource, int positionX, int positionY)
 	{
+		this.universe = universe;
 		this.id = id;
 		this.name = name;
 		this.resource = resource;
 		this.positionX = positionX;
 		this.positionY = positionY;
+		this.ships = new Fleet();
 	}
 	
-	HashMap<Building, Integer> planetBuildings = new HashMap<Building, Integer>();
+	public Flight newFlight(Planet endPlanet, Fleet fleet, ResourceAmount flightResource)
+	{
+		if(endPlanet == this)
+		{
+			System.out.println("Ista planeta.");
+			return null;
+		}
+		/*if(!owner.listOfKnownPlanets.contains(endPlanet))
+		{
+			System.out.println("Planeta ne postoji na spisku otrkivenih planeta. ");
+			return null;
+		}
+		*/
+		if(!fleet.isLessOrEqual(ships))
+		{
+			System.out.println("Da nema dovoljno flote");
+			return null;
+		}
+		
+		if(flightResource.getSumResource() > fleet.getMaxCapacity())
+		{
+			System.out.println("Nema dovoljno kapaciteta flota za resurse.");
+			return null;
+		}
+		
+		if(!resource.has(flightResource))
+		{
+			System.out.println("Nema dovoljno resursa na planeti.");
+			return null;
+		}
+		
+		//POLIJECEMO
+		
+		resource.remove(flightResource);
+		ships.remove(fleet);
+		
+		Flight flight = new Flight(fleet,this,endPlanet,flightResource);
+		
+		this.outgoingFlights.add(flight);
+		endPlanet.incomingFlights.add(flight);
+		
+		return flight;
+		
+		
+	}
 	
 	public ConstructionResult constructBuilding(Building building)
 	{
@@ -98,8 +148,23 @@ public class Planet
 		return this;
 	}
 	
+	public Planet removeFleet(Fleet fleet)
+	{
+		ships.remove(fleet);
+		
+		return this;
+	}
+	
 	public void tick()
 	{
+		/*U foreach petljama ne smije se lista mjenjati dok se prolazi kroz nju (dodavati ili oduzimati elemnte)
+		 * Let u svojoj tick funkciji moze da sleti i onda ce da se brise iz incomingFlight liste.
+		 * Zato nam treba for petlja unazad da nebi doslo do preskakanja elemenata pri brisanju iz liste.
+		 */
+		for(int i = incomingFlights.size()-1; i >= 0; i--)
+		{
+			incomingFlights.get(i).tick();
+		}
 		
 		resourceTimer++;
 		
@@ -191,6 +256,11 @@ public class Planet
 		return result;
 	}
 	
+	public Universe getUniverse()
+	{
+		return universe;
+	}
+	
 	public void setOwner(Player ownerPlanet)
 	{
 		this.owner = ownerPlanet;
@@ -224,6 +294,26 @@ public class Planet
 	public Player getOwner()
 	{
 		return owner;
+	}
+	
+	public Fleet getShips()
+	{
+		return ships;
+	}
+	
+	public int getSumOfDefDamage()
+	{
+		return ships.getSumDamage();
+	}
+	
+	public ArrayList<Flight> getOutgoingFlights()
+	{
+		return outgoingFlights;
+	}
+	
+	public ArrayList<Flight> getIncomingFlight()
+	{
+		return incomingFlights;
 	}
 	
 

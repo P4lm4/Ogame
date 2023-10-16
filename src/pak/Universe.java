@@ -48,13 +48,21 @@ public class Universe
 			
 			if(ok)
 			{
-				planetsOfTheUniverse.add(new Planet(p, "Planet" + p, new ResourceAmount(ResourceType.IRON, 500).add(ResourceType.CRYSTAL, 500),positionX, positionY));
+				planetsOfTheUniverse.add(new Planet(this, p, "Planet" + p, new ResourceAmount(ResourceType.IRON, 500).add(ResourceType.CRYSTAL, 500),positionX, positionY));
 			}
 		}
 		
 	}
 	
-	public ArrayList<Planet> planetScaned(Planet planet, int radius)
+	public void tick()
+	{
+		for(Planet p : planetsOfTheUniverse)
+		{
+			p.tick();
+		}
+	}
+	
+	public ArrayList<Planet> planetScan(Planet planet, int radius)
 	{
 		
 		ArrayList<Planet> planets = new ArrayList<Planet>();
@@ -68,6 +76,20 @@ public class Universe
 		}
 		
 		return planets;
+	}
+	
+	public boolean checkPlanet(Planet p)
+	{
+		for(Planet planet : planetsOfTheUniverse)
+		{
+			if(p.getId() == planet.getId())
+			{
+				System.out.println("Planeta se nalazi u univerzumu. ");
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	public Planet getPlanet(int idPlanet)

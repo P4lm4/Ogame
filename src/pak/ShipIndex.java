@@ -15,8 +15,8 @@ public class ShipIndex
 				/* name */		"Scout", 
 				/* health */	100,
 				/* damage */	10, 
-				/* capacity */	10, 
-				/* speed */		500, 
+				/* capacity */	500, 
+				/* speed */		1500, 
 				/* price */		new ResourceAmount(ResourceType.CRYSTAL, 50).add(ResourceType.IRON, 10)));
 		
 		
@@ -25,8 +25,17 @@ public class ShipIndex
 				/* name */		"Star Fighter", 
 				/* health*/		500,
 				/* damage*/		50, 
-				/* capacity */	100, 
-				/* speed */		5000, 
+				/* capacity */	1000, 
+				/* speed */		500, 
+				/* price */		new ResourceAmount(ResourceType.CRYSTAL, 530).add(ResourceType.IRON, 100)));
+		
+		ships.add(new Ship(
+				/* id */		"bomber", 
+				/* name */		"Bomber", 
+				/* health*/		1000,
+				/* damage*/		500, 
+				/* capacity */	50, 
+				/* speed */		100, 
 				/* price */		new ResourceAmount(ResourceType.CRYSTAL, 530).add(ResourceType.IRON, 100)));
 	}
 	
@@ -57,4 +66,5 @@ public class ShipIndex
 		
 		return null;
 	}
+	
 }

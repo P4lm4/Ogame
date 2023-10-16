@@ -38,6 +38,18 @@ public class ResourceAmount
 		return this;
 	}
 	
+	public int getSumResource()
+	{
+		int sumRes = 0;
+		
+		for(int i = 0; i < amount.length; i++)
+		{
+			sumRes += amount[i];
+		}
+		
+		return sumRes;
+	}
+	
 	public boolean has(ResourceAmount other)
 	{
 		
