@@ -110,8 +110,27 @@ public class Universe
 		{
 			if(p.getName().equalsIgnoreCase(username) && p.getPassword().equals(password))
 			{
+				p.generateToken();
 				return p;
 			}			
+		}
+		
+		return null;
+	}
+	
+	public Player autheticate(String token)
+	{
+		if(token == null || token.length() == 0)
+		{
+			return null;
+		}
+		
+		for(Player p : players)
+		{
+			if(p.getToken().equals(token))
+			{
+				return p;
+			}
 		}
 		
 		return null;
