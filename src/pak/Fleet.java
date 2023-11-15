@@ -28,6 +28,17 @@ public class Fleet
 
 	}
 	
+	public Fleet add(Fleet other)
+	{
+		for(Ship s : other.ships.keySet())
+		{
+			int count = other.ships.get(s);
+			this.addShip(s, count);
+		}
+		
+		return this;
+	}
+	
 	public Fleet remove(Fleet other)
 	{
 		
@@ -76,6 +87,56 @@ public class Fleet
 		}
 		//Ako smo stigli dovde onda je sve ok
 		return true;
+		
+	}
+	
+	public void clear()
+	{
+		ships.clear();
+	}
+	
+	public void takeDamage(int damage)
+	{
+		if(damage >= this.getSumHealth())
+		{
+			ships.clear();
+			return;
+		}
+		while(damage > 0 && ships.size() > 0)
+		{
+			int numberOfShips = 0;
+			
+			for(Ship ship : ships.keySet())
+			{
+				numberOfShips += ships.get(ship);
+			}
+			
+			int randomShipIndex = (int)(Math.random()*(numberOfShips));
+			int searchSum = 0;
+			Ship selectedShip = null;
+			
+			for(Ship ship : ships.keySet())
+			{
+				searchSum += ships.get(ship);
+				
+				if(randomShipIndex < searchSum)
+				{
+					selectedShip = ship;
+					break;
+				}
+			}
+			
+			if(selectedShip.getHealth() <= damage)
+			{
+				this.removeShip(selectedShip, 1);
+				damage -= selectedShip.getHealth();
+			}
+			else
+			{
+				break;
+			}
+		}
+		
 		
 	}
 	
@@ -212,6 +273,11 @@ public class Fleet
 		{
 			return false;
 		}
+	}
+	
+	public void setOwner(Player player)
+	{
+		this.owner = player;
 	}
 
 

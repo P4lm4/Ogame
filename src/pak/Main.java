@@ -7,6 +7,8 @@ public class Main
 
 	public static void main(String[] args)
 	{	
+		Player igrac1 = new Player(1, "Igor", "1234");
+		
 		Ship brod = ShipIndex.getInstance().getById("scout");
 		Ship brod1 = ShipIndex.getInstance().getById("fighter");
 		Ship brod2 = ShipIndex.getInstance().getById("bomber");
@@ -14,6 +16,8 @@ public class Main
 		Building metalZgrada = BuildingIndex.getInstance().getById("mine_metal");
 		Building kristalZgrada = BuildingIndex.getInstance().getById("mine_crystal");
 		Building elektrana = BuildingIndex.getInstance().getById("powerplant_energy");
+		
+		
 		
 		ResourceAmount pareIgraca = new ResourceAmount(ResourceType.IRON, 1000).add(ResourceType.CRYSTAL, 1000);
 		
@@ -57,6 +61,8 @@ public class Main
 		Planet planet1 = alpha.getPlanet(10); //new Planet(1, "Zemlja", new ResourceAmount(ResourceType.IRON, 1000).add(ResourceType.CRYSTAL, 1000),25,50);
 		
 		Planet planet2 = alpha.getPlanet(20);
+		
+		igrac1.takePlanet(planet1);
 		
 		ResourceAmount resursiFlote = new ResourceAmount(ResourceType.IRON, 200).add(ResourceType.CRYSTAL, 300);
 		
@@ -123,7 +129,7 @@ public class Main
 		
 		System.out.println(skeniranePlanete);
 		
-		System.out.println("Na " + planet2.getName() + " ima brodova " + planet2.getShips());
+		System.out.println("Na " + planet2.getName() + " ima brodova " + planet2.getShips() + " i resursa " + planet2.getResource());
 		
 
 	}

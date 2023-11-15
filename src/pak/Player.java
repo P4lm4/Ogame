@@ -76,5 +76,10 @@ public class Player
 	{
 		return password;
 	}
+	
+	public String toString()
+	{
+		return name;
+	}
 
 }

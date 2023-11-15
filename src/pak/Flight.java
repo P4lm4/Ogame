@@ -34,13 +34,29 @@ public class Flight
 		timeOfFlight--;
 		if(timeOfFlight == 0)
 		{
-			System.out.println("Flota je stigla na planetu " + endPlanet);
+			System.out.println("Flota igraca " + fleet.getOwner() +  " (" + fleet + ") je stigla na planetu " + endPlanet + " vlasnika " + endPlanet.getOwner() + " sa flotom " + endPlanet.getShips());
 			startPlanet.getOutgoingFlights().remove(this);
 			endPlanet.getIncomingFlight().remove(this);
 			
 			/*U ovome dijelu ce biti fight i ostale stvari pri sletanju flote na endPlanet*/
 			
+			if(fleet.getOwner() != endPlanet.getOwner())
+			{
+				if(Fight.attackPlanet(fleet, endPlanet))
+				{
+					fleet.getOwner().takePlanet(endPlanet);
+					System.out.println("Igrac " + fleet.getOwner() + " je pobjedio sa preostalom flotom " + fleet + " i osvaja planetu " + endPlanet.getName());
+				}
+				else
+				{
+					System.out.println("Igrac " + fleet.getOwner() + " je izgubio flotu u neuspjesnom napadu na planetu " + endPlanet.getName());
+					return;
+				}
+			}
 			
+			endPlanet.getShips().add(fleet);
+			endPlanet.getResource().add(resource);
+			System.out.println("Igraj " + fleet.getOwner() + " je istovario " + resource + " na planetu " + endPlanet.getName());
 			
 		}
 	}

@@ -69,6 +69,7 @@ public class Planet
 		
 		resource.remove(flightResource);
 		ships.remove(fleet);
+		fleet.setOwner(owner);
 		
 		Flight flight = new Flight(fleet,this,endPlanet,flightResource);
 		
