@@ -131,6 +131,8 @@ public class Main
 		
 		System.out.println("Na " + planet2.getName() + " ima brodova " + planet2.getShips() + " i resursa " + planet2.getResource());
 		
+		System.out.println(igrac1.generateToken());
+		
 
 	}
 

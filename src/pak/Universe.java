@@ -11,6 +11,7 @@ public class Universe
 	private int weightCordinate;
 	
 	ArrayList<Planet> planetsOfTheUniverse = new ArrayList<Planet>();
+	ArrayList<Player> players = new ArrayList<Player>();
 	
 	public Universe(int heightCordinate, int weightCordinate, int nubmerOfPlantes)
 	{
@@ -60,6 +61,60 @@ public class Universe
 		{
 			p.tick();
 		}
+	}
+	
+	public Player register(String username, String password)
+	{
+		if(username.length() < 3 || username.length() > 20)
+		{
+			return null;
+		}
+		if(password.length() < 6 || password.length() > 150)
+		{
+			return null;
+		}
+		
+		Planet startPlanet = null;
+		
+		for(Planet p : planetsOfTheUniverse)
+		{
+			if(p.getOwner() == null)
+			{
+				startPlanet = p;
+				break;
+			}
+		}
+		
+		if(startPlanet == null)
+		{
+			return null;
+		}
+		for(Player p : players)
+		{
+			if(p.getName().equalsIgnoreCase(username))
+			{
+				return null;
+			}
+		}
+		
+		Player player = new Player(players.size(), username, password);
+		player.takePlanet(startPlanet);
+		players.add(player);
+		
+		return player;
+	}
+	
+	public Player login(String username, String password)
+	{
+		for(Player p : players)
+		{
+			if(p.getName().equalsIgnoreCase(username) && p.getPassword().equals(password))
+			{
+				return p;
+			}			
+		}
+		
+		return null;
 	}
 	
 	public ArrayList<Planet> planetScan(Planet planet, int radius)

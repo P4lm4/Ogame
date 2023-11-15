@@ -8,6 +8,7 @@ public class Player
 	private int id;
 	private String name;
 	private String password;
+	private String token;
 	
 	public Player(int id, String name, String password)
 	{
@@ -62,6 +63,26 @@ public class Player
 		
 	}
 	
+	public String generateToken()
+	{
+		String alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+		int lenght = 16;
+		
+		token = "";
+		
+		for(int i = 0; i < lenght; i++)
+		{
+			token += alphabet.charAt((int)(Math.random()*alphabet.length()));
+		}
+		
+		return token;
+	}
+	
+	public void clearToken()
+	{
+		token = null;
+	}
+	
 	public int getId()
 	{
 		return id;
@@ -80,6 +101,11 @@ public class Player
 	public String toString()
 	{
 		return name;
+	}
+	
+	public String getToken()
+	{
+		return token;
 	}
 
 }
