@@ -107,5 +107,10 @@ public class Player
 	{
 		return token;
 	}
+	
+	public ArrayList<Planet> getOwnedPlanets()
+	{
+		return listOfOwnedPlanets;
+	}
 
 }

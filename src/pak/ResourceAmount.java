@@ -102,6 +102,12 @@ public class ResourceAmount
 		return this; // omogucava da se nanize vise add poziva u jednoj liniji
 	}	
 	
+	public int getSingleResource(ResourceType resource)
+	{
+		/* .oridnal() - Za enum vrijednost daje njen redni broj*/
+		return amount[resource.ordinal()];
+	}
+	
 	public ResourceAmount add(ResourceAmount other)
 	{
 		for(int i = 0; i < amount.length; i++)

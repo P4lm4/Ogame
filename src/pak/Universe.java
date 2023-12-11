@@ -5,13 +5,17 @@ import java.util.Random;
 
 public class Universe
 {
-	
+	private final long UPDATE_INTERVAL = 1000;
 	private int numbersOfPlanet;
 	private int heightCordinate;
 	private int weightCordinate;
 	
+	private long lastUpdate;
+	
 	ArrayList<Planet> planetsOfTheUniverse = new ArrayList<Planet>();
 	ArrayList<Player> players = new ArrayList<Player>();
+	
+
 	
 	public Universe(int heightCordinate, int weightCordinate, int nubmerOfPlantes)
 	{
@@ -20,6 +24,16 @@ public class Universe
 		this.numbersOfPlanet = nubmerOfPlantes;
 		
 		generate();
+		lastUpdate = System.currentTimeMillis();
+	}
+	
+	public void update()
+	{
+		while(lastUpdate + UPDATE_INTERVAL <= System.currentTimeMillis())
+		{
+			tick();
+			lastUpdate += UPDATE_INTERVAL;
+		}
 	}
 	
 	private void generate()
@@ -118,7 +132,7 @@ public class Universe
 		return null;
 	}
 	
-	public Player autheticate(String token)
+	public Player authenticate(String token)
 	{
 		if(token == null || token.length() == 0)
 		{
@@ -127,7 +141,7 @@ public class Universe
 		
 		for(Player p : players)
 		{
-			if(p.getToken().equals(token))
+			if(p.getToken() != null && p.getToken().equals(token))
 			{
 				return p;
 			}
