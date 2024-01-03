@@ -1,5 +1,7 @@
 package pak;
 
+import org.json.JSONObject;
+
 public class Building
 {
 	
@@ -12,7 +14,7 @@ public class Building
 	private ResourceAmount productionPerLvl;
 	private ResourceAmount price;
 	private ResourceAmount pricePerLvl;
-	private int constractionTimer;
+	private int constructionTimer;
 	
 	public Building(String id, String name, int health, int energy, int energyPerLvl, ResourceAmount production, ResourceAmount productionPerLvl, ResourceAmount price, ResourceAmount pricePerLvl, int constractionTimer)
 	{
@@ -26,7 +28,26 @@ public class Building
 		this.productionPerLvl = productionPerLvl;
 		this.price = price;
 		this.pricePerLvl = pricePerLvl;
-		this.constractionTimer = constractionTimer;
+		this.constructionTimer = constractionTimer;
+	}
+	
+	public JSONObject serializeToJson()
+	{
+		JSONObject json = new JSONObject();
+		
+		json.put("id", id);
+		json.put("name", name);
+		json.put("health", health);
+		json.put("energy", energy);
+		json.put("energyPerLvl", energyPerLvl);
+		json.put("production", production.serializeToJson());
+		json.put("productionPerLvl", productionPerLvl.serializeToJson());
+		json.put("price", price.serializeToJson());
+		json.put("pricePerLvl", pricePerLvl.serializeToJson());
+		json.put("constructionTimer", constructionTimer);
+		
+		return json;
+		
 	}
 
 	public String getId()
@@ -71,7 +92,7 @@ public class Building
 	
 	public int getConstractionTimer()
 	{
-		return constractionTimer;
+		return constructionTimer;
 	}
 	
 	public void produce(Planet planet, int lvl)

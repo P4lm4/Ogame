@@ -2,12 +2,55 @@ package pak;
 
 import java.util.HashMap;
 
+import org.json.JSONObject;
+
 public class Fleet
 {
 	
 	private Player owner;
 		
 	HashMap<Ship, Integer> ships = new HashMap<Ship, Integer>();
+	
+	public Fleet()
+	{
+		
+	}
+	
+	public Fleet (JSONObject json, Universe universe)
+	{
+		if(json.has("owner"))
+		{
+			owner = universe.getPlayer(json.getInt("owner"));
+		}
+		
+		JSONObject shipsJson = json.getJSONObject("ships");
+		
+		for(String shipKey : shipsJson.keySet())
+		{
+			Ship s = ShipIndex.getInstance().getById(shipKey);
+			ships.put(s, shipsJson.getInt(shipKey));
+		}
+	}
+	
+	public JSONObject serializeToJson()
+	{
+		JSONObject json = new JSONObject();
+		
+		if(owner != null)
+		{
+			json.put("owner", owner.getId());
+		}
+		
+		JSONObject shipsJson = new JSONObject();
+		
+		for(Ship s : ships.keySet())
+		{
+			shipsJson.put(s.getId(), ships.get(s));
+		}
+		json.put("ships", shipsJson);
+		
+		return json;
+	}
 	
 	public Fleet addShip(Ship ship, int count)
 	{

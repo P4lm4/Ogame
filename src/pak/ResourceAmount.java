@@ -1,5 +1,7 @@
 package pak;
 
+import org.json.JSONObject;
+
 public class ResourceAmount
 {
 	
@@ -16,6 +18,33 @@ public class ResourceAmount
 	{
 		this(); //poziva drugi konstruktor(iznad konstruktor)
 		add(resource, count);
+	}
+	
+	public ResourceAmount(JSONObject json)
+	{
+		this();
+		
+		for(ResourceType r : ResourceType.values())
+		{
+			String resourceName = r.name().toLowerCase();
+			
+			if(json.has(resourceName))
+			{
+				amount[r.ordinal()] = json.getInt(resourceName);
+			}
+		}
+	}
+	
+	public JSONObject serializeToJson()
+	{
+		JSONObject json = new JSONObject();
+		
+		for(ResourceType r : ResourceType.values())
+		{
+			json.put(r.name().toLowerCase(), amount[r.ordinal()]);
+		}
+		
+		return json;
 	}
 	
 	public ResourceAmount add(ResourceAmount other, int multiplier)

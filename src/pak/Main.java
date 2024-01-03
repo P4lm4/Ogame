@@ -2,18 +2,23 @@ package pak;
 
 import java.util.ArrayList;
 
+import org.json.JSONObject;
+
 public class Main
 {
 
 	public static void main(String[] args)
 	{	
-		Player igrac1 = new Player(1, "Igor", "1234");
+		
+		Universe alpha = new Universe(100, 100, 100);
+		
+		Player igrac1 = alpha.register("Igor", "123456");
 		
 		Ship brod = ShipIndex.getInstance().getById("scout");
 		Ship brod1 = ShipIndex.getInstance().getById("fighter");
 		Ship brod2 = ShipIndex.getInstance().getById("bomber");
 		
-		Building metalZgrada = BuildingIndex.getInstance().getById("mine_metal");
+		Building metalZgrada = BuildingIndex.getInstance().getById("mine_iron");
 		Building kristalZgrada = BuildingIndex.getInstance().getById("mine_crystal");
 		Building elektrana = BuildingIndex.getInstance().getById("powerplant_energy");
 		
@@ -52,7 +57,7 @@ public class Main
 		
 		System.out.println(flota1);
 		
-		Universe alpha = new Universe(100, 100, 100);
+		
 		
 		System.out.println("Imamo " + alpha.getNumberOfPlanets() + " planeta");
 		
@@ -133,7 +138,22 @@ public class Main
 		
 		System.out.println(igrac1.generateToken());
 		
-
+		JSONObject serializedUniverse =  alpha.serializeToJson();
+		
+		System.out.println(serializedUniverse);
+		
+		Universe beta = new Universe(serializedUniverse);
+		
+		System.out.println("Upsijeli smo deserializovati! ");
+		
+		System.out.println(beta.serializeToJson());
+		
+		alpha.saveToFile("Alpha.json");
+		
+		Universe gama = new Universe("Alpha.json");
+		
+		System.out.println(gama.serializeToJson());
+	
 	}
 
 }

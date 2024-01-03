@@ -1,14 +1,21 @@
 package pak;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class Universe
 {
 	private final long UPDATE_INTERVAL = 1000;
-	private int numbersOfPlanet;
-	private int heightCordinate;
-	private int weightCordinate;
+	private int numberOfPlanets;
+	private int height;
+	private int width;
 	
 	private long lastUpdate;
 	
@@ -19,12 +26,117 @@ public class Universe
 	
 	public Universe(int heightCordinate, int weightCordinate, int nubmerOfPlantes)
 	{
-		this.heightCordinate = heightCordinate;
-		this.weightCordinate = weightCordinate;
-		this.numbersOfPlanet = nubmerOfPlantes;
+		this.height = heightCordinate;
+		this.width = weightCordinate;
+		this.numberOfPlanets = nubmerOfPlantes;
 		
 		generate();
 		lastUpdate = System.currentTimeMillis();
+	}
+	
+	public Universe(JSONObject json)
+	{
+		load(json);
+	}
+	
+	private void load(JSONObject json)
+	{
+		numberOfPlanets = json.getInt("numberOfPlanets");
+		height = json.getInt("height");
+		width = json.getInt("width");
+		lastUpdate = json.getLong("lastUpdate");
+		
+		JSONArray player = json.getJSONArray("players");
+		for(int i = 0; i < player.length(); i++)
+		{
+			players.add(new Player(player.getJSONObject(i), this));
+		}
+		
+		JSONArray planets = json.getJSONArray("planets");
+		for(int i = 0; i < planets.length(); i++)
+		{
+			planetsOfTheUniverse.add(new Planet(planets.getJSONObject(i), this));
+		}
+		
+		for(Player p : players)
+		{
+			p.resolvePlanets();
+		}
+		
+		for(Planet p : planetsOfTheUniverse)
+		{
+			p.resolveFlights();
+		}
+	}
+	
+	public Universe(String fileName)
+	{
+		try
+		{
+			Scanner s = new Scanner(new File(fileName));
+			
+			StringBuilder sb = new StringBuilder();
+			
+			while(s.hasNext())
+			{
+				sb.append(s.nextLine());
+			}
+			
+			s.close();
+			
+			JSONObject json = new JSONObject(sb.toString());
+			
+			load(json);
+		}
+		catch (FileNotFoundException e)
+		{
+			System.out.println("Neuspijesno ucitavanje univerzuma iza fajla " + fileName);
+			e.printStackTrace();
+		}
+	}
+	
+	public JSONObject serializeToJson()
+	{
+		JSONObject json = new JSONObject();
+		
+		json.put("numberOfPlanets", numberOfPlanets);
+		json.put("height", height);
+		json.put("width", width);
+		json.put("lastUpdate", lastUpdate);
+		
+		JSONArray planetsArray = new JSONArray();
+		JSONArray playersArray = new JSONArray();
+		
+		for(Planet p : planetsOfTheUniverse)
+		{
+			planetsArray.put(p.serializeToJson());
+		}
+		json.put("planets", planetsArray);
+		
+		for(Player p : players)
+		{
+			playersArray.put(p.serializeToJson());
+		}
+		json.put("players", playersArray);
+		
+		return json;
+	}
+	
+	public void saveToFile(String fileName)
+	{
+		try
+		{
+			PrintWriter pw = new PrintWriter(new File(fileName));
+			
+			pw.println(serializeToJson());
+			
+			pw.close();
+		} 
+		catch (FileNotFoundException e)
+		{
+			System.out.println("Greska u snimanju univerzuma u fajl " + fileName);
+			e.printStackTrace();
+		}
 	}
 	
 	public void update()
@@ -42,11 +154,11 @@ public class Universe
 		
 	
 		
-		for(int p = 0; p < numbersOfPlanet; p++)
+		for(int p = 0; p < numberOfPlanets; p++)
 		{
 			
-			int positionX = randomNumber.nextInt(heightCordinate);
-			int positionY = randomNumber.nextInt(weightCordinate);
+			int positionX = randomNumber.nextInt(height);
+			int positionY = randomNumber.nextInt(width);
 			
 			boolean ok = true;
 			
@@ -188,6 +300,18 @@ public class Universe
 	public int getNumberOfPlanets()
 	{
 		return planetsOfTheUniverse.size();
+	}
+	
+	public Player getPlayer(int idPlayer)
+	{
+		for(Player p : players)
+		{
+			if(p.getId() == idPlayer)
+			{
+				return p;
+			}
+		}	
+		return null;
 	}
 
 }

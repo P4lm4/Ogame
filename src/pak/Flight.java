@@ -1,5 +1,7 @@
 package pak;
 
+import org.json.JSONObject;
+
 public class Flight
 {
 	private final int SPEED_CONSTANT = 300;
@@ -8,6 +10,10 @@ public class Flight
 	private Planet endPlanet;
 	private ResourceAmount resource;
 	private int timeOfFlight;
+	
+	private int startPlanetId;
+	private int endPlanetId;
+	private Universe universe;
 
 	
 	public Flight(Fleet fleet, Planet startPlanet, Planet endPlanet, ResourceAmount resource)
@@ -26,6 +32,36 @@ public class Flight
 		{
 			timeOfFlight = 1;
 		}
+		
+	}
+	
+	public Flight(JSONObject json, Universe universe)
+	{
+		this.universe = universe;
+		fleet = new Fleet(json.getJSONObject("fleet"), universe);
+		startPlanetId = json.getInt("startPlanet");
+		endPlanetId = json.getInt("endPlanet");
+		resource = new ResourceAmount(json.getJSONObject("resource"));
+		timeOfFlight = json.getInt("timeOfFlight");
+	}
+	
+	public void resolvePlanets()
+	{
+		startPlanet = universe.getPlanet(startPlanetId);
+		endPlanet = universe.getPlanet(endPlanetId);
+	}
+	
+	public JSONObject serializeToJson()
+	{
+		JSONObject json = new JSONObject();
+		
+		json.put("fleet", fleet.serializeToJson());
+		json.put("startPlanet", startPlanet.getId());
+		json.put("endPlanet", endPlanet.getId());
+		json.put("resource", resource.serializeToJson());
+		json.put("timeOfFlight", timeOfFlight);
+		
+		return json;
 		
 	}
 	

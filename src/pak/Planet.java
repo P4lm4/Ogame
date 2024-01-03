@@ -3,6 +3,9 @@ package pak;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class Planet
 {
 	
@@ -15,7 +18,10 @@ public class Planet
 	private Fleet ships;
 	private int resourceTimer = 0;
 	private Building conBuilding;
-	private int constructionTimer;
+	private Ship conShip;
+	private int conShipCount;
+	private int conBuildingTimer;
+	private int conShipTimer;
 	private Player owner;
 	private Universe universe;
 	
@@ -32,6 +38,104 @@ public class Planet
 		this.positionX = positionX;
 		this.positionY = positionY;
 		this.ships = new Fleet();
+	}
+	
+	public Planet(JSONObject json, Universe universe)
+	{
+		this.universe = universe;
+		
+		id = json.getInt("id");
+		name = json.getString("name");
+		positionX = json.getInt("positionX");
+		positionY = json.getInt("positionY");
+		resource = new ResourceAmount(json.getJSONObject("resource"));
+		ships = new Fleet(json.getJSONObject("ships"), universe);
+		resourceTimer = json.getInt("resourceTimer");
+		if(json.has("conBuilding"))
+		{
+			conBuilding = BuildingIndex.getInstance().getById(json.getString("conBuilding"));
+		}
+		if(json.has("conShip"))
+		{
+			conShip = ShipIndex.getInstance().getById(json.getString("conShip"));
+		}
+		conShipCount = json.getInt("conShipCount");
+		conBuildingTimer = json.getInt("conBuildingTimer");
+		conShipTimer = json.getInt("conShipTimer");
+		if(json.has("owner"))
+		{
+			owner = universe.getPlayer(json.getInt("owner"));
+		}
+		
+		JSONObject buildings = json.getJSONObject("buildings");
+		for(String buildingId : buildings.keySet())
+		{
+			Building b = BuildingIndex.getInstance().getById(buildingId);
+			planetBuildings.put(b, buildings.getInt(buildingId));
+		}
+		
+		JSONArray flights = json.getJSONArray("outgoingFlights");
+		for(int i = 0; i < flights.length(); i++)
+		{
+			outgoingFlights.add(new Flight(flights.getJSONObject(i), universe));
+		}
+	}
+	
+	public void resolveFlights()
+	{
+		for(Flight f : outgoingFlights)
+		{
+			f.resolvePlanets();
+			f.getEndPlanet().incomingFlights.add(f);
+		}
+	}
+	
+	public JSONObject serializeToJson()
+	{
+		JSONObject json = new JSONObject();
+		
+		json.put("id", id);
+		json.put("name", name);
+		json.put("positionX", positionX);
+		json.put("positionY", positionY);
+		json.put("resource", resource.serializeToJson());
+		json.put("ships", ships.serializeToJson());
+		json.put("resourceTimer", resourceTimer);
+		if(conBuilding != null)
+		{
+			json.put("conBuilding", conBuilding.getId());
+		}
+		if(conShip != null)
+		{
+			json.put("conShip", conShip.getId());
+		}
+		json.put("conShipCount", conShipCount);
+		json.put("conBuildingTimer", conBuildingTimer);
+		json.put("conShipTimer", conShipTimer);
+		if(owner != null)
+		{
+			json.put("owner", owner.getId());
+		}
+		
+		JSONObject buildings = new JSONObject();
+		
+		for(Building b : planetBuildings.keySet())
+		{
+			buildings.put(b.getId(), planetBuildings.get(b));
+		}
+		json.put("buildings", buildings);
+		
+		JSONArray outgoingFlightsArray = new JSONArray();
+		
+		for(Flight f : outgoingFlights)
+		{
+			outgoingFlightsArray.put(f.serializeToJson());
+		}
+		
+		json.put("outgoingFlights", outgoingFlightsArray);
+		
+		return json;
+		
 	}
 	
 	public Flight newFlight(Planet endPlanet, Fleet fleet, ResourceAmount flightResource)
@@ -103,11 +207,32 @@ public class Planet
 		
 		resource.remove(price);
 		conBuilding = building;
-		constructionTimer = building.getConstractionTimer();
+		conBuildingTimer = building.getConstractionTimer();
 		
 		return ConstructionResult.OK;
 		
 		
+	}
+	
+	public ConstructionResult constructShip(Ship ship, int count)
+	{
+		ResourceAmount price = ship.getPrice();
+		
+		if(!this.resource.has(price, count))
+		{
+			return ConstructionResult.NO_RESOURCE;
+		}
+		if(conShip != null)
+		{
+			return ConstructionResult.ALREADY_CONSTRUCTING;
+		}
+		
+		resource.remove(price, count);
+		conShip = ship;
+		conShipCount = count;
+		conShipTimer = ship.getConstructionTimer();
+		
+		return ConstructionResult.OK;
 	}
 	
 	public double distanceTo(Planet planet)
@@ -182,9 +307,9 @@ public class Planet
 		
 		if(conBuilding != null)
 		{
-			constructionTimer--;
+			conBuildingTimer--;
 			
-			if(constructionTimer <= 0)
+			if(conBuildingTimer <= 0)
 			{
 				addBuilding(conBuilding);
 				
@@ -192,6 +317,27 @@ public class Planet
 				
 				conBuilding = null;
 			}
+		}
+		
+		if(conShip != null)
+		{
+			conShipTimer--;
+			
+			if(conShipTimer <= 0)
+			{
+				ships.addShip(conShip, 1);
+				conShipCount--;
+				
+				if(conShipCount > 0)
+				{
+					conShipTimer = conShip.getConstructionTimer();
+				}
+				else
+				{
+					System.out.println("Na planeti " + name + " napravljen je " + conShip.getName());
+					conShip = null;
+				}
+			}			
 		}
 		
 		
@@ -315,6 +461,43 @@ public class Planet
 	public ArrayList<Flight> getIncomingFlight()
 	{
 		return incomingFlights;
+	}
+	
+	public Building getBuildingInConstruction()
+	{
+		return conBuilding;
+	}
+	
+	public int getBuildingConstructionTimer()
+	{
+		return conBuildingTimer;
+	}
+	
+	public Ship getShipInConstruction()
+	{
+		return conShip;
+	}
+	
+	public int getShipConstructionTimer()
+	{
+		return conShipTimer;
+	}
+	
+	public int getConShipCount()
+	{
+		return conShipCount;
+	}
+	
+	public int getfullConShipTimer()
+	{		
+		if(conShip != null)
+		{
+			return (conShipCount - 1) * conShip.getConstructionTimer() + conShipTimer;
+		}
+		else 
+		{
+			return 0;
+		}
 	}
 	
 

@@ -2,6 +2,9 @@ package pak;
 
 import java.util.ArrayList;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class Player
 {
 	
@@ -9,12 +12,77 @@ public class Player
 	private String name;
 	private String password;
 	private String token;
+	private Universe universe;
+	
+	JSONArray ownedArray;
+	JSONArray knownArray;
 	
 	public Player(int id, String name, String password)
 	{
 		this.id = id;
 		this.name = name;
 		this.password = password;
+	}
+	
+	public Player(JSONObject json, Universe universe)
+	{
+		this.universe = universe;
+		id = json.getInt("id");
+		name = json.getString("name");
+		password = json.getString("password");
+		if(json.has("token"))
+		{
+			token = json.getString("token");
+		}
+		else
+		{
+			token = null;
+		}
+		ownedArray = json.getJSONArray("ownedArray");
+		knownArray = json.getJSONArray("knownArray");
+	
+	}
+	
+	public void resolvePlanets()
+	{
+		for(int i = 0; i < ownedArray.length(); i++)
+		{
+			listOfOwnedPlanets.add(universe.getPlanet(ownedArray.getInt(i)));
+		}
+		for(int i = 0; i < knownArray.length(); i++)
+		{
+			listOfKnownPlanets.add(universe.getPlanet(knownArray.getInt(i)));
+		}
+		
+		ownedArray = null;
+		knownArray = null;
+	}
+	
+	public JSONObject serializeToJson()
+	{
+		JSONObject json = new JSONObject();
+		
+		json.put("id", id);
+		json.put("name", name);
+		json.put("password", password);
+		json.put("token", token);
+		
+		JSONArray ownedArray = new JSONArray();
+		JSONArray knownArray = new JSONArray();
+		
+		for(Planet p : listOfOwnedPlanets)
+		{
+			ownedArray.put(p.getId());
+		}
+		for(Planet p : listOfKnownPlanets)
+		{
+			knownArray.put(p.getId());
+		}
+		
+		json.put("ownedArray", ownedArray);
+		json.put("knownArray", knownArray);
+		
+		return json;
 	}
 	
 	ArrayList<Planet> listOfOwnedPlanets = new ArrayList<Planet>();
